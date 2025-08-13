@@ -1,8 +1,9 @@
 name: Databricks Asset Bundle CI/CD
 
 on:
-  pull_request:
-    branches: [master]
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 env:
@@ -73,5 +74,9 @@ jobs:
         run: |
           databricks bundle deploy --target prod
         env:
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+          env:
+          BUNDLE_VAR_bundle_uuid: "${{ secrets.BUNDLE_UUID }}"
+          BUNDLE_VAR_catalog_name: "${{ secrets.CATALOG_NAME }}"
+          BUNDLE_VAR_dev_user_email: "${{ secrets.DEV_USER_EMAIL }}"
+          BUNDLE_VAR_prod_user_email: "${{ secrets.PROD_USER_EMAIL }}"
+          BUNDLE_VAR_workspace_host: "${{ secrets.WORKSPACE_HOST }}"
