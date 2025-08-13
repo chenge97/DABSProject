@@ -1,0 +1,11 @@
+resources:
+  schemas:
+    main_schema:
+      catalog_name: workspace
+      name: prod_db
+      comment: "The main database for prod environment"
+    
+    medallion_schema:
+      catalog_name: "medallion_${bundle.target}"
+      name: medallion_schema
+      comment: "Schema for medallion project"

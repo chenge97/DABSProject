@@ -1,0 +1,31 @@
+resources:
+  jobs:
+    run_notebook: # This is the one you need to use in the databricks bundle run command
+      name: run-notebook # Title of the Job
+      parameters:
+        - name: "run_dq_step"
+          default: "${var.run_dq}"
+      queue:
+        enabled: true
+      tasks:
+        - task_key: hello-world-task
+          notebook_task:
+            notebook_path: ../../src/helloworld.ipynb
+        - task_key: dq-flag-task
+          depends_on:
+            - task_key: "hello-world-task" # depends on name
+          condition_task: 
+            left: "{{job.parameters.run_dq_step}}"
+            op: "EQUAL_TO"
+            right: true
+        - task_key: dq-task
+          notebook_task:
+            notebook_path: ../../src/dq.ipynb
+          depends_on:
+            - task_key: "dq-flag-task" # depends on name
+              outcome: true # If the task above is tru then run this
+        - task_key: "bye-world-task"
+          depends_on:
+            - task_key: "hello-world-task" # depends on name
+          notebook_task:
+            notebook_path: ../../src/byeworld.ipynb

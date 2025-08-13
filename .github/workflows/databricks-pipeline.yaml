@@ -1,0 +1,62 @@
+name: Databricks Asset Bundle CI/CD
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DATABRICKS_CLI_VERSION: "0.262.0"
+
+jobs:
+  # Validate and test the bundle
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Databricks CLI
+        run: |
+          pip install databricks-cli==${{ env.DATABRICKS_CLI_VERSION }}
+
+      - name: Validate bundle configuration
+        run: |
+          databricks bundle validate --target dev
+          databricks bundle validate --target prod
+
+  # Deploy to development environment
+  deploy-prod:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Databricks CLI
+        run: |
+          pip install databricks-cli==${{ env.DATABRICKS_CLI_VERSION }}
+
+      - name: Configure Databricks CLI
+        run: |
+          echo "${{ secrets.DATABRICKS_CONFIG_DEV }}" > ~/.databrickscfg
+        env:
+          DATABRICKS_CONFIG_DEV: ${{ secrets.DATABRICKS_CONFIG_DEV }}
+
+      - name: Deploy to development
+        run: |
+          databricks bundle deploy --target dev
+        env:
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}

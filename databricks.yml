@@ -1,0 +1,50 @@
+# This is a Databricks asset bundle definition for dab_project.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: dab_project
+  uuid: ${var.bundle_uuid}
+
+include:
+  - resources/jobs/*.yaml
+  - resources/pipelines/*.yaml
+  - resources/variables/*.yaml
+  - resources/schemas/*.yaml
+
+sync:
+  include:
+    - tests/**
+
+targets:
+  dev:
+    mode: development
+    default: true
+    #workspace:
+      #host: Configured at runtime using DATABRICKS_HOST
+    permissions:
+      - user_name: ${var.dev_user_email}
+        level: CAN_MANAGE
+    run_as:
+      user_name: ${var.dev_user_email}
+    variables:
+      run_dq: true
+      schema: dev_db
+    resources:
+      schemas:
+        main_schema:
+          catalog_name: ${var.catalog_name}
+          name: dev_db
+          comment: "The main database for dev environment"
+
+  prod:
+    mode: production
+    workspace:
+      #host: Configured at runtime using DATABRICKS_HOST
+      # Use variable for root path
+      root_path: /Workspace/Users/${var.prod_user_email}/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: ${var.prod_user_email}
+        level: CAN_MANAGE
+    variables:
+      run_dq: false
+      schema: prod_db
+      schema_medallion_name: medallion_schema

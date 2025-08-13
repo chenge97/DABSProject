@@ -1,0 +1,29 @@
+variables: # Variables injected using BUNDLE_VAR_var_name=value
+    workspace_host:
+      description: "Databricks workspace host URL"
+
+    bundle_uuid:
+      description: "Databricks UUID of bundle"
+    
+    dev_user_email:
+      description: "User email for development permissions"
+    
+    prod_user_email:
+      description: "User email for production permissions"
+      default: "${var.dev_user_email}"
+    
+    catalog_name:
+      description: "Unity Catalog name"
+      default: "workspace"
+    
+    run_dq:
+      default: true
+      description: Whether or not run DQ steps
+
+    schema:
+      default: "dev_db"
+      description: Database name
+
+    schema_medallion_name:
+      default: "${bundle.target}_${workspace.current_user.short_name}_medallion_schema"
+      description: Schema for medallion project
