@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  DATABRICKS_CLI_VERSION: "0.262.0"
+  # DATABRICKS_CLI_VERSION: "0.262.0"
   BUNDLE_VAR_BUNDLE_UUID: "${{ secrets.BUNDLE_VAR_BUNDLE_UUID }}"
   BUNDLE_VAR_CATALOG_NAME: "${{ secrets.BUNDLE_VAR_CATALOG_NAME }}"
   BUNDLE_VAR_DEV_USER_EMAIL: "${{ secrets.BUNDLE_VAR_DEV_USER_EMAIL }}"
@@ -21,14 +21,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
       - name: Install Databricks CLI
         run: |
-          pip install databricks-cli==${{ env.DATABRICKS_CLI_VERSION }}
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+      - name: Print Databricks CLI version
+        run: |
+          databricks -v
 
       - name: Validate bundle configuration
         run: |
