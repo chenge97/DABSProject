@@ -35,11 +35,11 @@ jobs:
           databricks bundle validate --target dev
           databricks bundle validate --target prod
         env:
-          BUNDLE_VAR_BUNDLE_UUID: "${{ secrets.BUNDLE_VAR_BUNDLE_UUID }}"
-          BUNDLE_VAR_CATALOG_NAME: "${{ secrets.BUNDLE_VAR_CATALOG_NAME }}"
-          BUNDLE_VAR_DEV_USER_EMAIL: "${{ secrets.BUNDLE_VAR_DEV_USER_EMAIL }}"
-          BUNDLE_VAR_PROD_USER_EMAIL: "${{ secrets.BUNDLE_VAR_PROD_USER_EMAIL }}"
-          BUNDLE_VAR_WORKSPACE_HOST: "${{ secrets.BUNDLE_VAR_WORKSPACE_HOST }}"
+          BUNDLE_VAR_BUNDLE_UUID: "${{ secrets.BUNDLE_UUID }}"
+          BUNDLE_VAR_CATALOG_NAME: "${{ secrets.CATALOG_NAME }}"
+          BUNDLE_VAR_DEV_USER_EMAIL: "${{ secrets.DEV_USER_EMAIL }}"
+          BUNDLE_VAR_PROD_USER_EMAIL: "${{ secrets.PROD_USER_EMAIL }}"
+          BUNDLE_VAR_WORKSPACE_HOST: "${{ secrets.WORKSPACE_HOST }}"
 
   # Deploy to development environment
   deploy-prod:
