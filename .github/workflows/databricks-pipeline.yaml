@@ -2,7 +2,7 @@ name: Databricks Asset Bundle CI/CD
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 env:
