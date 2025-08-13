@@ -42,7 +42,7 @@ jobs:
           BUNDLE_VAR_prod_user_email: "${{ secrets.PROD_USER_EMAIL }}"
           BUNDLE_VAR_workspace_host: "${{ secrets.WORKSPACE_HOST }}"
 
-  # Deploy to development environment
+  # Deploy to production environment
   deploy-prod:
     needs: validate
     runs-on: ubuntu-latest
@@ -50,11 +50,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
 
       - name: Install Databricks CLI
         run: |
@@ -70,7 +65,7 @@ jobs:
         env:
           DATABRICKS_CONFIG_DEV: ${{ secrets.DATABRICKS_CONFIG_DEV }}
 
-      - name: Deploy to development
+      - name: Deploy to Production
         run: |
           databricks bundle deploy --target prod
         env:
