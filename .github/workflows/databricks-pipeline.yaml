@@ -7,11 +7,6 @@ on:
 
 env:
   DATABRICKS_CLI_VERSION: "0.262.0"
-  BUNDLE_VAR_BUNDLE_UUID: "${{ secrets.BUNDLE_VAR_BUNDLE_UUID }}"
-  BUNDLE_VAR_CATALOG_NAME: "${{ secrets.BUNDLE_VAR_CATALOG_NAME }}"
-  BUNDLE_VAR_DEV_USER_EMAIL: "${{ secrets.BUNDLE_VAR_DEV_USER_EMAIL }}"
-  BUNDLE_VAR_PROD_USER_EMAIL: "${{ secrets.BUNDLE_VAR_PROD_USER_EMAIL }}"
-  BUNDLE_VAR_WORKSPACE_HOST: "${{ secrets.BUNDLE_VAR_WORKSPACE_HOST }}"
 
 jobs:
   # Validate and test the bundle
@@ -39,9 +34,12 @@ jobs:
         run: |
           databricks bundle validate --target dev
           databricks bundle validate --target prod
-        #env:
-        #  DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
-        #  DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+        env:
+          BUNDLE_VAR_BUNDLE_UUID: "${{ secrets.BUNDLE_VAR_BUNDLE_UUID }}"
+          BUNDLE_VAR_CATALOG_NAME: "${{ secrets.BUNDLE_VAR_CATALOG_NAME }}"
+          BUNDLE_VAR_DEV_USER_EMAIL: "${{ secrets.BUNDLE_VAR_DEV_USER_EMAIL }}"
+          BUNDLE_VAR_PROD_USER_EMAIL: "${{ secrets.BUNDLE_VAR_PROD_USER_EMAIL }}"
+          BUNDLE_VAR_WORKSPACE_HOST: "${{ secrets.BUNDLE_VAR_WORKSPACE_HOST }}"
 
   # Deploy to development environment
   deploy-prod:
